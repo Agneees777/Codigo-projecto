@@ -1,0 +1,218 @@
+## Proyecto de programacion en lenjuage estadistico
+#     Integrantes
+# Raul Ricardo Reales Cohen 
+# Marieth Agnes Guillen García
+# Erick Enrique Bastidas Santana
+# Idalia Hernandez Lopez
+
+##leemos los documentos(archivos) de los datos de la federacion nacional de 
+##cafeteros de colombia.
+
+#paquetes
+install.packages("ggplot2")
+install.packages("dplyr")
+install.packages("openxlsx")
+install.packages("tidyverse")
+install.packages("DataExplorer")
+install.packages("SmartEDA")
+install.packages("psych")
+install.packages("priceR") # tiene datos de inflacion y variacon de las monedas en los paises 
+install.packages("dlookr")
+#librerias
+library(ggplot2)
+library(openxlsx)
+library(dplyr)
+library(readxl)
+library(tidyverse)
+library(DataExplorer)
+library(SmartEDA)
+library(psych)
+library(priceR)
+library(dlookr)
+
+##Exportaciones del cafe atraves del tiempo
+
+Expor <- read_excel("datosexp.xlsx", sheet = "1. Total_Volumen")
+View(Expor)
+
+##vector de longitud 780 para asignarle una nueva columna al dara.frame Expor
+##para agregar valiacion de colores en la grafica en los datos por decadas
+decada <- as.factor(rep(1:7, c(120,120,120,120,120,120,54)))
+Expor = data.frame(Expor,decada)
+
+summary(Expor)
+##Datos de los precios del cafe a traves del tiempo
+
+
+
+pid5 <- read_excel("datospap.xlsx", sheet = "5.Precio Ex_Dock Anual Cafetero")
+View(pid5)
+
+pid6 <- read_excel("datospap.xlsx", sheet = "2. Precio Interno Mensual")
+View(pid6)
+
+
+##vector de longitud 108 para asignarle una nueva columna al dara.frame pid5
+##para agregar variacion de colores en la grafica en los datos por decadas 
+decadadas <- as.factor(rep(1:11, c(10,10,10,10,10,10,10,10,10,10,8))) 
+pid5 = data.frame(pid5,decadadas)
+
+
+
+##promedios y desviaciones estandar anuales o por decadadas para los datos de 
+##exportaciones
+
+
+##Promedio de los datos de exportaciones de cafe verde por decadadas de
+##los años 1958 al 2022,donde se exportan miles desacos cada uno pesando 60kg 
+
+tapply(Expor$Total.Exportaciones,Expor$decada,mean)
+
+
+##desviacion estandar de los datos de exportaciones de cafe verde por decadadas de
+##los años 1958 al 2022,donde se exportan miles desacos cada uno pesando 60kg 
+
+tapply(Expor$Total.Exportaciones,Expor$decada,sd)
+
+
+##promedios y desviaciones estandar anuales o por decadadas para los datos de 
+##Precios 
+
+
+##Promedio de los Precios Ex_Dock Anual Cafetero por decadadas
+
+tapply(pid5$Precio.externo,pid5$decadadas, mean)
+
+
+#desviacion estandar de los datos de precios Ex_Dock Anual Cafetero por decadadas
+
+tapply(pid5$Precio.externo,pid5$decadadas, sd)
+
+
+##Gŕaficas de las variaciones de precio o produccion a traves del tiempo.
+
+
+##Graficas de exportaciones a traves del tiempo por decadadas
+
+
+##grafica datos dispersos
+plot(Expor$MES, Expor$`Total Exportaciones`, xlab = "Decadadas.",
+     ylab = "Exportaciones de cafe en kg.", 
+     main = "Volumen de las exportaciones Colombianas de cafe-Mensual." , 
+     col =  decada, type = "p")
+
+
+##grafica lineal
+plot(Expor$MES, Expor$`Total Exportaciones`, xlab = "Decadadas.",
+     ylab = "Exportaciones de cafe en kg.", 
+     main = "Volumen de las exportaciones Colombianas de cafe-Mensual." , 
+     col =  decada, type = "l")
+
+
+##graficas de los precios externos del cafe colombiano a traves del tiempo
+
+
+##grafica datos dispersos
+plot(pid5$Año, pid5$`Precio externo`, xlab = "Decadas.",
+     ylab = "Precios Externos.", 
+     main = "Precio externo del cafe Colombiano promedio anual cafetero." , 
+     col = decadadas, type = "p")
+
+##Grafica lineal 
+plot(pid5$Año, pid5$`Precio externo`, xlab = "Decadas.",
+     ylab = "Precios Externos.", 
+     main = "Precio externo del cafe Colombiano promedio anual cafetero." , 
+     col = decadadas, type = "l")
+
+
+##Gŕaficas de precios estandarizados a precios de hoy (convirtiendo pesos de
+##valor pasado a valor presente considerando la inflacíon).
+
+
+##codigo para comparar el valor del peso antigu0 con el actual 
+
+countries_dataframe <- show_countries()
+
+min(inflation_dataframe$date)
+max(inflation_dataframe$date)
+str(inflation_dataframe)
+inflation_dataframe <- retrieve_inflation_data(country)
+adjust_for_inflation(100, 1960, country = "Colombia", to_date = 2021,
+                     inflation_dataframe = inflation_dataframe,
+                     countries_dataframe = countries_dataframe)
+
+
+
+
+
+##ciclo for para definir variables con el precio del peso atraves del tiempo
+##año por año
+length(inflation_dataframe$date)
+devalue1 <-  NULL
+devalue2<- NULL
+desde <- 1960
+for (k in 1:62) {
+devalue1[k] <- desde
+devalue2[k] <- adjust_for_inflation(pid6[k,2],desde,country="Colombia",to_date=2020,
+                                      inflation_dataframe = inflation_dataframe,
+                                      countries_dataframe = countries_dataframe)
+desde <- desde + 1
+}
+
+
+
+#Grafica de la devaluacion del peso atraves del tiempo
+
+plot(devalue1,devalue2, col = c(1:12), type = "h", lwd = 3,
+     xlab = "Años por decenio.", ylab = "Valor del peso.", 
+     main = "Devaluación del peso en los precios del cafe mensual.")
+
+
+##Pruebas estadísticas para comparar las medias de dos décadas (por ejemplo 
+##1991-2000 vs 2001-2010) de los precios del caf́e (utilizar precios es-
+##tandarizados al valor presente).
+
+
+devalue2=as.numeric(devalue2)
+t.test(devalue2[1:10],devalue2[20:40])
+
+
+
+
+##Diagramas de dispersi ́on y correlaciones. Por ejemplo: Precio interno vs
+#Volumen exportaciones
+
+
+pid6<-pid6[-c(1:168),]
+pid6<-pid6[-c(775),]
+
+length(pid6$`Precio interno`)
+length(Expor$Total.Exportaciones)
+
+P <- lm(Expor$Total.Exportaciones~pid6$`Precio interno`)
+plot(Expor$Total.Exportaciones,pid6$`Precio interno`,
+     xlab = "Total de Exportaciones", ylab = "Precio Interno", col = "Black",
+     main = "Regrecion lineal de precios internos con total de exportaciones")
+abline(P, col = "green")
+
+
+Correlaciones <- cor(pid6$`Precio interno`,
+                     Expor$Total.Exportaciones,method="pearson")
+
+
+
+
+##Proyecciones de precio o producci ́on utilizando regresi ́on lineal
+options(scipen = 999 )
+p <- lm(pid6$Mes~pid6$`Precio interno`)
+plot(pid6$`Precio interno`,pid6$Mes, ylab = "Meses", xlab = "precios por mes",
+     col = "Black",main = "Proyecciones de precios" )
+abline(p, col = "blue")
+
+
+
+#Visualizaciones de datos por regiones en un mapa
+
+
+
+
