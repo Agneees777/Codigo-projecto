@@ -96,14 +96,14 @@ tapply(pid5$Precio.externo,pid5$decadadas, sd)
 
 
 ##grafica datos dispersos
-plot(Expor$MES, Expor$`Total Exportaciones`, xlab = "Decadadas.",
+plot(Expor$MES, Expor$Total.Exportaciones, xlab = "Decadadas.",
      ylab = "Exportaciones de cafe en kg.", 
      main = "Volumen de las exportaciones Colombianas de cafe-Mensual." , 
      col =  decada, type = "p")
 
 
 ##grafica lineal
-plot(Expor$MES, Expor$`Total Exportaciones`, xlab = "Decadadas.",
+plot(Expor$MES, Expor$Total.Exportaciones, xlab = "Decadadas.",
      ylab = "Exportaciones de cafe en kg.", 
      main = "Volumen de las exportaciones Colombianas de cafe-Mensual." , 
      col =  decada, type = "l")
@@ -113,13 +113,13 @@ plot(Expor$MES, Expor$`Total Exportaciones`, xlab = "Decadadas.",
 
 
 ##grafica datos dispersos
-plot(pid5$Año, pid5$`Precio externo`, xlab = "Decadas.",
+plot(pid5$Año, pid5$Precio.externo, xlab = "Decadas.",
      ylab = "Precios Externos.", 
      main = "Precio externo del cafe Colombiano promedio anual cafetero." , 
      col = decadadas, type = "p")
 
 ##Grafica lineal 
-plot(pid5$Año, pid5$`Precio externo`, xlab = "Decadas.",
+plot(pid5$Año, pid5$Precio.externo, xlab = "Decadas.",
      ylab = "Precios Externos.", 
      main = "Precio externo del cafe Colombiano promedio anual cafetero." , 
      col = decadadas, type = "l")
@@ -211,7 +211,11 @@ abline(p, col = "blue")
 
 
 
-#Visualizaciones de datos por regiones en un mapa
+
+
+
+
+
 
 
 
