@@ -64,7 +64,7 @@ pid5 = data.frame(pid5,decadadas)
 
 
 ##Promedio de los datos de exportaciones de cafe verde por decadadas de
-##los años 1958 al 2022,donde se exportan miles desacos cada uno pesando 60kg 
+##los años 1958 al 2022,donde se exportan miles de sacos cada uno pesando 60kg 
 
 tapply(Expor$Total.Exportaciones,Expor$decada,mean)
 
@@ -102,27 +102,15 @@ plot(Expor$MES, Expor$Total.Exportaciones, xlab = "Decadadas.",
      col =  decada, type = "p")
 
 
-##grafica lineal
-plot(Expor$MES, Expor$Total.Exportaciones, xlab = "Decadadas.",
-     ylab = "Exportaciones de cafe en kg.", 
-     main = "Volumen de las exportaciones Colombianas de cafe-Mensual." , 
-     col =  decada, type = "l")
-
-
 ##graficas de los precios externos del cafe colombiano a traves del tiempo
 
 
 ##grafica datos dispersos
+
 plot(pid5$Año, pid5$Precio.externo, xlab = "Decadas.",
      ylab = "Precios Externos.", 
      main = "Precio externo del cafe Colombiano promedio anual cafetero." , 
      col = decadadas, type = "p")
-
-##Grafica lineal 
-plot(pid5$Año, pid5$Precio.externo, xlab = "Decadas.",
-     ylab = "Precios Externos.", 
-     main = "Precio externo del cafe Colombiano promedio anual cafetero." , 
-     col = decadadas, type = "l")
 
 
 ##Gŕaficas de precios estandarizados a precios de hoy (convirtiendo pesos de
@@ -205,7 +193,7 @@ Correlaciones <- cor(pid6$`Precio interno`,
 ##Proyecciones de precio o producci ́on utilizando regresi ́on lineal
 options(scipen = 999 )
 p <- lm(pid6$Mes~pid6$`Precio interno`)
-plot(pid6$`Precio interno`,pid6$Mes, ylab = "Meses", xlab = "precios por mes",
+plot(pid6$`Precio interno`,pid6$Mes, ylab = "Años", xlab = "precio",
      col = "Black",main = "Proyecciones de precios" )
 abline(p, col = "blue")
 
